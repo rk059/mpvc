@@ -545,6 +545,13 @@ main {
   text-align: center;
 }
 
+.review-summary {
+  max-width: 700px;
+  margin: 10px auto 0;
+  color: var(--slate-500);
+  font-size: 1rem;
+}
+
 .review-grid,
 .feedback-grid {
   display: grid;
