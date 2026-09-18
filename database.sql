@@ -1,0 +1,11 @@
+CREATE TABLE enquiries (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(120) NOT NULL,
+  phone VARCHAR(40) NOT NULL,
+  email VARCHAR(190) NULL,
+  project VARCHAR(120) NULL,
+  message TEXT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  INDEX idx_enquiries_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
