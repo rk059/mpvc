@@ -151,11 +151,10 @@ function initializeGallery() {
   });
 }
 
-const galleryGrid = document.querySelector('.full-gallery');
+const galleryGrids = [...document.querySelectorAll('.gallery-section .gallery-grid, .full-gallery')];
+const galleryGrid = galleryGrids[0];
 if (galleryGrid) {
-  document.querySelectorAll('.full-gallery').forEach((grid, index) => {
-    if (index > 0) grid.closest('.section')?.remove();
-  });
+  galleryGrids.slice(1).forEach((grid) => grid.closest('.section')?.remove());
   document.querySelector('.published-media-section')?.remove();
   galleryGrid.innerHTML = '';
   fetch('media.php')
