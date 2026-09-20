@@ -19,10 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($image === false) {
             $error = 'The article image could not be uploaded. Use JPG, PNG, or WebP under 8 MB.';
         } else {
-            $posts = read_content('posts');
-            $posts[] = ['id' => bin2hex(random_bytes(8)), 'title' => $title, 'body' => $body, 'category' => $category ?: 'Journal', 'image' => $image, 'published_at' => date('c')];
-            write_content('posts', $posts);
-            $message = 'Blog post published.';
+            if (create_post($title, $body, $category ?: 'Journal', $image)) {
+              $message = 'Blog post published.';
+            } else {
+              if ($image !== '') @unlink(__DIR__ . '/../' . $image);
+              $error = 'The database could not save this blog post.';
+            }
         }
     }
     if ($action === 'media') {
@@ -52,9 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     if ($action === 'delete_post') {
-        $posts = array_values(array_filter(read_content('posts'), static fn (array $post): bool => (string)($post['id'] ?? '') !== (string)($_POST['id'] ?? '')));
-        write_content('posts', $posts);
-        $message = 'Blog post removed.';
+        if (delete_post((string)($_POST['id'] ?? ''))) {
+          $message = 'Blog post removed.';
+        } else {
+          $error = 'The blog post could not be found.';
+        }
     }
 }
 
@@ -71,7 +75,7 @@ function save_upload(array $file, array $allowedTypes)
     return 'images/' . $name;
 }
 
-$posts = read_content('posts');
+$posts = read_posts();
 $media = read_media();
 ?><!DOCTYPE html>
 <html lang="en">

@@ -20,6 +20,18 @@ CREATE TABLE users (
   UNIQUE KEY uq_users_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE posts (
+  id VARCHAR(32) NOT NULL,
+  title VARCHAR(160) NOT NULL,
+  body TEXT NOT NULL,
+  category VARCHAR(60) NOT NULL DEFAULT 'Journal',
+  image VARCHAR(255) NULL,
+  published_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  INDEX idx_posts_published_at (published_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE gallery_media (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   caption VARCHAR(160) NOT NULL,

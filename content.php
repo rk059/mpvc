@@ -98,6 +98,66 @@ function create_admin_user(string $name, string $email, string $password): bool
     ]);
 }
 
+function read_posts(): array
+{
+    $pdo = database_connection();
+    if (!$pdo) {
+        return read_content('posts');
+    }
+    try {
+        $statement = $pdo->query('SELECT id, title, body, category, image, published_at FROM posts ORDER BY published_at DESC, created_at DESC');
+        return $statement->fetchAll();
+    } catch (Throwable $error) {
+        error_log($error->getMessage());
+        return read_content('posts');
+    }
+}
+
+function create_post(string $title, string $body, string $category, string $image): bool
+{
+    $postId = bin2hex(random_bytes(8));
+    $pdo = database_connection();
+    if (!$pdo) {
+        $posts = read_content('posts');
+        $posts[] = ['id' => $postId, 'title' => $title, 'body' => $body, 'category' => $category, 'image' => $image, 'published_at' => date('c')];
+        write_content('posts', $posts);
+        return true;
+    }
+    try {
+        $statement = $pdo->prepare('INSERT INTO posts (id, title, body, category, image, published_at) VALUES (:id, :title, :body, :category, :image, :published_at)');
+        return $statement->execute([
+            ':id' => $postId,
+            ':title' => $title,
+            ':body' => $body,
+            ':category' => $category,
+            ':image' => $image !== '' ? $image : null,
+            ':published_at' => date('Y-m-d H:i:s'),
+        ]);
+    } catch (Throwable $error) {
+        error_log($error->getMessage());
+        return false;
+    }
+}
+
+function delete_post(string $id): bool
+{
+    $pdo = database_connection();
+    if (!$pdo) {
+        $posts = read_content('posts');
+        $filtered = array_values(array_filter($posts, static fn (array $post): bool => (string)($post['id'] ?? '') !== $id));
+        write_content('posts', $filtered);
+        return count($filtered) !== count($posts);
+    }
+    try {
+        $statement = $pdo->prepare('DELETE FROM posts WHERE id = :id');
+        $statement->execute([':id' => $id]);
+        return $statement->rowCount() > 0;
+    } catch (Throwable $error) {
+        error_log($error->getMessage());
+        return false;
+    }
+}
+
 function read_media(): array
 {
     $pdo = database_connection();

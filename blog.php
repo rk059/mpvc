@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/content.php';
-$posts = read_content('posts');
+$posts = read_posts();
 usort($posts, static function (array $first, array $second): int {
     return strcmp((string)($second['published_at'] ?? ''), (string)($first['published_at'] ?? ''));
 });
