@@ -4,17 +4,28 @@ if (admin_record()) { header('Location: login.php'); exit; }
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
-    $username = trim((string)($_POST['username'] ?? ''));
+    $name = trim((string)($_POST['name'] ?? ''));
+    $email = trim((string)($_POST['email'] ?? ''));
     $password = (string)($_POST['password'] ?? '');
-    if (!preg_match('/^[A-Za-z0-9._-]{3,40}$/', $username)) {
-        $error = 'Use a username with 3 to 40 letters, numbers, dots, dashes, or underscores.';
+    if (mb_strlen($name) < 2 || mb_strlen($name) > 120) {
+        $error = 'Enter a name between 2 and 120 characters.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Enter a valid email address.';
     } elseif (strlen($password) < 8) {
         $error = 'Use a password with at least 8 characters.';
+    } elseif (!database_connection()) {
+        $error = 'The database is not configured. Add config.php beside enquiry.php first.';
     } else {
-        file_put_contents(content_path('admin'), json_encode(['username' => $username, 'password_hash' => password_hash($password, PASSWORD_DEFAULT)], JSON_PRETTY_PRINT), LOCK_EX);
-        $_SESSION['admin_username'] = $username;
-        header('Location: index.php');
-        exit;
+        try {
+            create_admin_user($name, $email, $password);
+            $record = admin_record();
+            $_SESSION['admin_user_id'] = $record['id'];
+            $_SESSION['admin_name'] = $record['name'];
+            header('Location: index.php');
+            exit;
+        } catch (Throwable $exception) {
+            $error = 'This email may already be registered, or the users table is missing.';
+        }
     }
 }
-?><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create admin account | Smart uPVC Bhuna</title><link rel="stylesheet" href="admin.css"></head><body><main class="admin-shell"><section class="admin-card"><p class="eyebrow">First-time setup</p><h1>Create admin account</h1><p class="muted">This account will manage blog posts and uploaded photos or videos.</p><?php if ($error): ?><p class="error"><?= e($error) ?></p><?php endif; ?><form method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><label>Username<input name="username" required autocomplete="username"></label><label>Password<input name="password" type="password" required minlength="8" autocomplete="new-password"></label><button type="submit">Create account</button></form></section></main></body></html>
+?><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create admin account | Smart uPVC Bhuna</title><link rel="stylesheet" href="admin.css"></head><body><main class="admin-shell"><section class="admin-card"><p class="eyebrow">First-time setup</p><h1>Create admin account</h1><p class="muted">This account will manage blog posts and uploaded photos or videos.</p><?php if ($error): ?><p class="error"><?= e($error) ?></p><?php endif; ?><form method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><label>Full name<input name="name" required maxlength="120" autocomplete="name"></label><label>Email<input name="email" type="email" required maxlength="190" autocomplete="email"></label><label>Password<input name="password" type="password" required minlength="8" autocomplete="new-password"></label><button type="submit">Create account</button></form></section></main></body></html>

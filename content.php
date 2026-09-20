@@ -39,18 +39,65 @@ function write_content(string $name, array $items): void
 
 function admin_record(): ?array
 {
-    ensure_content_storage();
-    $path = content_path('admin');
-    if (!file_exists($path)) {
+    $pdo = database_connection();
+    if (!$pdo) {
         return null;
     }
-    $record = json_decode(file_get_contents($path) ?: '', true);
-    return is_array($record) && isset($record['username'], $record['password_hash']) ? $record : null;
+    try {
+        $statement = $pdo->query('SELECT id, name, email, password FROM users ORDER BY id ASC LIMIT 1');
+        $record = $statement->fetch();
+        return is_array($record) ? $record : null;
+    } catch (Throwable $error) {
+        error_log($error->getMessage());
+        return null;
+    }
+}
+
+function database_connection(): ?PDO
+{
+    static $pdo;
+    static $attempted = false;
+    if ($attempted) {
+        return $pdo;
+    }
+    $attempted = true;
+    $config = file_exists(__DIR__ . '/config.php') ? require __DIR__ . '/config.php' : [];
+    $host = $config['db_host'] ?? getenv('DB_HOST') ?: '';
+    $dbName = $config['db_name'] ?? getenv('DB_NAME') ?: '';
+    $dbUser = $config['db_user'] ?? getenv('DB_USER') ?: '';
+    $dbPassword = $config['db_password'] ?? getenv('DB_PASSWORD') ?: '';
+    if ($host === '' || $dbName === '' || $dbUser === '') {
+        return null;
+    }
+    try {
+        $pdo = new PDO("mysql:host={$host};dbname={$dbName};charset=utf8mb4", $dbUser, $dbPassword, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]);
+    } catch (Throwable $error) {
+        error_log($error->getMessage());
+        $pdo = null;
+    }
+    return $pdo;
+}
+
+function create_admin_user(string $name, string $email, string $password): bool
+{
+    $pdo = database_connection();
+    if (!$pdo) {
+        return false;
+    }
+    $statement = $pdo->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
+    return $statement->execute([
+        ':name' => $name,
+        ':email' => $email,
+        ':password' => password_hash($password, PASSWORD_DEFAULT),
+    ]);
 }
 
 function is_admin(): bool
 {
-    return !empty($_SESSION['admin_username']);
+    return !empty($_SESSION['admin_user_id']);
 }
 
 function require_admin(): void
