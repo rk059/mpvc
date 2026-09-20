@@ -29,7 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($password) < 8) {
         $error = 'Use a password with at least 8 characters.';
     } elseif (!database_connection()) {
-        $error = 'The database is not configured. Add config.php beside enquiry.php first.';
+        $error = file_exists(__DIR__ . '/../config.php')
+            ? 'MySQL connection failed. Check the cPanel database name, username, password, host, and user privileges.'
+            : 'config.php was not found beside enquiry.php.';
     } else {
         try {
             create_admin_user($name, $email, $password);

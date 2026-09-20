@@ -30,6 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'The gallery item could not be found.';
         }
     }
+        if ($action === 'delete_default') {
+          if (hide_default_gallery_media((string)($_POST['file'] ?? ''))) {
+            $message = 'Default gallery image removed.';
+          } else {
+            $error = 'The default gallery image could not be found.';
+          }
+        }
 }
 
 function save_gallery_upload(array $file)
@@ -52,6 +59,7 @@ function save_gallery_upload(array $file)
     return ['path' => $relativePath, 'type' => strpos($mime, 'video/') === 0 ? 'video' : 'image'];
 }
 
+$defaultMedia = active_default_gallery_media();
 $media = array_reverse(read_media());
 ?><!DOCTYPE html>
 <html lang="en">
@@ -80,7 +88,13 @@ $media = array_reverse(read_media());
       </form>
     </section>
     <section class="admin-panel" style="margin-top:24px">
-      <h2>Uploaded gallery media</h2>
+      <h2>Default gallery images</h2>
+      <div class="admin-list">
+        <?php if (!$defaultMedia): ?><p class="muted">No default gallery images are currently shown.</p><?php else: foreach ($defaultMedia as $item): ?>
+          <div class="admin-item"><div><strong><?= e((string)$item['caption']) ?></strong><small>Default image</small></div><div class="admin-actions"><a href="../<?= e((string)$item['file']) ?>" target="_blank">Open</a><form method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete_default"><input type="hidden" name="file" value="<?= e((string)$item['file']) ?>"><button class="danger" type="submit">Remove</button></form></div></div>
+        <?php endforeach; endif; ?>
+      </div>
+      <h2 style="margin-top:28px">Uploaded gallery media</h2>
       <div class="admin-list">
         <?php if (!$media): ?><p class="muted">No uploaded gallery media yet.</p><?php else: foreach ($media as $item): ?>
           <div class="admin-item"><div><strong><?= e((string)$item['caption']) ?></strong><small><?= e((string)$item['type']) ?> · <?= e(public_date((string)$item['created_at'])) ?></small></div><div class="admin-actions"><a href="../<?= e((string)$item['file']) ?>" target="_blank">Open</a><form method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= e((string)$item['id']) ?>"><button class="danger" type="submit">Delete</button></form></div></div>

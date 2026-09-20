@@ -179,15 +179,41 @@ const revealObserver = new IntersectionObserver(
 
 revealItems.forEach((item) => revealObserver.observe(item));
 
-const galleryItems = [...document.querySelectorAll('.gallery-item')];
 const modal = document.getElementById('galleryModal');
 const modalImage = document.getElementById('modalImage');
 const modalClose = document.querySelector('.modal-close');
 const prevBtn = document.querySelector('.modal-arrow.prev');
 const nextBtn = document.querySelector('.modal-arrow.next');
 
-const galleryImages = galleryItems.map((item) => item.querySelector('img').src);
+let galleryItems = [];
+let galleryImages = [];
 let currentIndex = 0;
+
+function initializeGallery() {
+  galleryItems = [...document.querySelectorAll('.gallery-item')].filter((item) => item.querySelector('img'));
+  galleryImages = galleryItems.map((item) => item.querySelector('img').src);
+  galleryItems.forEach((item, index) => {
+    item.addEventListener('click', () => openModal(index));
+  });
+}
+
+const defaultGallery = document.querySelector('.full-gallery');
+if (defaultGallery) {
+  fetch('gallery-defaults.php')
+    .then((response) => response.json())
+    .then((items) => {
+      const activeFiles = new Set(items.map((item) => item.file));
+      document.querySelectorAll('.full-gallery .gallery-item').forEach((item) => {
+        const image = item.querySelector('img');
+        const path = image ? new URL(image.src, window.location.href).pathname : '';
+        if (!Array.from(activeFiles).some((file) => path.endsWith(`/${file}`))) item.remove();
+      });
+    })
+    .catch(() => {})
+    .finally(initializeGallery);
+} else {
+  initializeGallery();
+}
 
 const publishedMediaGrid = document.getElementById('publishedMediaGrid');
 if (publishedMediaGrid) {
@@ -230,10 +256,6 @@ function changeModal(step) {
   currentIndex = (currentIndex + step + galleryImages.length) % galleryImages.length;
   modalImage.src = galleryImages[currentIndex];
 }
-
-galleryItems.forEach((item, index) => {
-  item.addEventListener('click', () => openModal(index));
-});
 
 modalClose?.addEventListener('click', closeModal);
 prevBtn?.addEventListener('click', () => changeModal(-1));
