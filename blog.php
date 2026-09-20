@@ -18,7 +18,7 @@ usort($posts, static function (array $first, array $second): int {
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="styles.css" />
-  <script defer src="script.js?v=2"></script>
+  <script defer src="script.js?v=3"></script>
 </head>
 <body class="inner-page">
   <header class="site-header"><div class="container nav-wrap"><a href="index.html" class="brand" aria-label="Smart uPVC Bhuna home"><div class="brand-logo-wrap"><img src="logo/website/header-logo-200.png" alt="Smart uPVC Bhuna logo" /></div></a><button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="about.html">About</a><a href="products.html#upvc">uPVC Doors &amp; Windows</a><a href="products.html#aluminium">Aluminium Doors &amp; Windows</a><a href="gallery.html">Gallery</a><a class="active" href="blog.php">Blog</a><a href="contact.html">Contact</a><a class="nav-cta" href="tel:+919253131031" aria-label="Call Smart uPVC Bhuna"><i class="fa-solid fa-phone"></i></a></nav></div></header>

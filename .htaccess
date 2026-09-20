@@ -1,14 +1,4 @@
 RewriteEngine On
 
-# Redirect legacy extension URLs to the clean public URLs.
-RewriteCond %{THE_REQUEST} \s/+(.+?)\.html(?:[?#\s]) [NC]
-RewriteRule ^(.+)\.html$ /$1 [R=301,L,NE]
-
-# Keep the homepage at the root.
-RewriteRule ^index$ / [R=301,L]
-
-# Serve the existing static pages behind clean URLs.
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(about|products|gallery|articles|contact)/?$ $1.html [L]
-RewriteRule ^blog/?$ blog.php [L]
+# Keep direct .html and .php file URLs working on Apache hosts.
+DirectoryIndex index.html
