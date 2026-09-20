@@ -197,26 +197,13 @@ function initializeGallery() {
   });
 }
 
-const defaultGallery = document.querySelector('.full-gallery');
-if (defaultGallery) {
-  fetch('gallery-defaults.php')
-    .then((response) => response.json())
-    .then((items) => {
-      const activeFiles = new Set(items.map((item) => item.file));
-      document.querySelectorAll('.full-gallery .gallery-item').forEach((item) => {
-        const image = item.querySelector('img');
-        const path = image ? new URL(image.src, window.location.href).pathname : '';
-        if (!Array.from(activeFiles).some((file) => path.endsWith(`/${file}`))) item.remove();
-      });
-    })
-    .catch(() => {})
-    .finally(initializeGallery);
-} else {
-  initializeGallery();
-}
-
-const publishedMediaGrid = document.getElementById('publishedMediaGrid');
-if (publishedMediaGrid) {
+const galleryGrid = document.querySelector('.full-gallery');
+if (galleryGrid) {
+  document.querySelectorAll('.full-gallery').forEach((grid, index) => {
+    if (index > 0) grid.closest('.section')?.remove();
+  });
+  document.querySelector('.published-media-section')?.remove();
+  galleryGrid.innerHTML = '';
   fetch('media.php')
     .then((response) => response.json())
     .then((items) => {
@@ -224,16 +211,32 @@ if (publishedMediaGrid) {
         const wrapper = document.createElement(item.type === 'video' ? 'div' : 'button');
         wrapper.className = 'gallery-item';
         if (item.type === 'video') {
-          wrapper.innerHTML = `<video class="showcase-video" controls muted loop playsinline preload="metadata"><source src="${item.file}" type="video/mp4" /></video><span class="media-caption">${item.caption}</span>`;
+          const video = document.createElement('video');
+          video.className = 'showcase-video';
+          video.controls = true;
+          video.muted = true;
+          video.loop = true;
+          video.playsInline = true;
+          video.preload = 'metadata';
+          const source = document.createElement('source');
+          source.src = item.file;
+          source.type = item.type === 'video' ? 'video/mp4' : item.type;
+          video.appendChild(source);
+          wrapper.appendChild(video);
         } else {
           wrapper.type = 'button';
           wrapper.setAttribute('aria-label', `Open ${item.caption}`);
-          wrapper.innerHTML = `<img src="${item.file}" alt="${item.caption}" loading="lazy" />`;
+          const image = document.createElement('img');
+          image.src = item.file;
+          image.alt = item.caption;
+          image.loading = 'lazy';
+          wrapper.appendChild(image);
         }
-        publishedMediaGrid.appendChild(wrapper);
+        galleryGrid.appendChild(wrapper);
       });
+      initializeGallery();
     })
-    .catch(() => {});
+    .catch(() => initializeGallery());
 }
 
 function openModal(index) {
