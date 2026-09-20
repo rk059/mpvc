@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'Blog post removed.';
     }
 }
+
 function save_upload(array $file, array $allowedTypes)
 {
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || ($file['size'] ?? 0) > 40 * 1024 * 1024) return false;
@@ -69,6 +70,62 @@ function save_upload(array $file, array $allowedTypes)
     if (!move_uploaded_file((string)$file['tmp_name'], $destination)) return false;
     return 'images/' . $name;
 }
+
 $posts = read_content('posts');
 $media = read_media();
-?><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Website admin | Smart uPVC Bhuna</title><link rel="stylesheet" href="admin.css"></head><body><main class="admin-shell"><div class="admin-header"><div><p class="eyebrow">Smart uPVC Bhuna</p><h1>Website admin</h1><p class="muted">Publish articles and fresh project media.</p></div><a href="logout.php">Log out</a></div><nav class="admin-nav"><a href="../blog.php" target="_blank">View blog</a><a href="../gallery.html" target="_blank">View gallery</a></nav><?php if ($message): ?><p class="success"><?= e($message) ?></p><?php endif; ?><?php if ($error): ?><p class="error"><?= e($error) ?></p><?php endif; ?><div class="admin-grid"><section class="admin-panel"><h2>Publish a blog post</h2><form method="post" enctype="multipart/form-data"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="post"><label>Title<input name="title" required maxlength="160"></label><label>Category<input name="category" value="Journal" maxlength="60"></label><label>Article image <span class="muted">(optional, 8 MB max)</span><input name="image" type="file" accept="image/jpeg,image/png,image/webp"></label><label>Article text<textarea name="body" rows="9" required></textarea></label><button type="submit">Publish post</button></form></section><section class="admin-panel"><h2>Publish photo or video</h2><form method="post" enctype="multipart/form-data"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="media"><label>Photo or video<input name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" required></label><label>Caption<input name="caption" maxlength="160" placeholder="Sliding window installation"></label><button type="submit">Publish media</button></form></section></div><section class="admin-panel" style="margin-top:24px"><h2>Published blog posts</h2><div class="admin-list"><?php if (!$posts): ?><p class="muted">No posts published yet.</p><?php else: foreach (array_reverse($posts) as $post): ?><div class="admin-item"><div><strong><?= e((string)$post['title']) ?></strong><small><?= e(public_date((string)$post['published_at'])) ?></small></div><form method="post" class="admin-actions"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete_post"><input type="hidden" name="id" value="<?= e((string)$post['id']) ?>"><button class="danger" type="submit">Delete</button></form></div><?php endforeach; endif; ?></div><h2 style="margin-top:28px">Published media</h2><div class="admin-list"><?php if (!$media): ?><p class="muted">No uploaded media yet.</p><?php else: foreach (array_reverse($media) as $item): ?><div class="admin-item"><div><strong><?= e((string)$item['caption']) ?></strong><small><?= e((string)$item['type']) ?> · <?= e(public_date((string)$item['created_at'])) ?></small></div><a href="../<?= e((string)$item['file']) ?>" target="_blank">Open</a></div><?php endforeach; endif; ?></div></section></main></body></html>
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Website admin | Smart uPVC Bhuna</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <div class="admin-header">
+      <div><p class="eyebrow">Smart uPVC Bhuna</p><h1>Website admin</h1><p class="muted">Publish articles and fresh project media.</p></div>
+      <a href="logout.php">Log out</a>
+    </div>
+    <nav class="admin-nav"><a href="../blog.php" target="_blank">View blog</a><a href="../gallery.html" target="_blank">View gallery</a></nav>
+    <?php if ($message): ?><p class="success"><?= e($message) ?></p><?php endif; ?>
+    <?php if ($error): ?><p class="error"><?= e($error) ?></p><?php endif; ?>
+    <div class="admin-grid">
+      <section class="admin-panel">
+        <h2>Publish a blog post</h2>
+        <form method="post" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="post">
+          <label>Title<input name="title" required maxlength="160"></label>
+          <label>Category<input name="category" value="Journal" maxlength="60"></label>
+          <label>Article image <span class="muted">(optional, 8 MB max)</span><input name="image" type="file" accept="image/jpeg,image/png,image/webp"></label>
+          <label>Article text<textarea name="body" rows="9" required></textarea></label>
+          <button type="submit">Publish post</button>
+        </form>
+      </section>
+      <section class="admin-panel">
+        <h2>Publish photo or video</h2>
+        <form method="post" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="media">
+          <label>Photo or video<input name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" required></label>
+          <label>Caption<input name="caption" maxlength="160" placeholder="Sliding window installation"></label>
+          <button type="submit">Publish media</button>
+        </form>
+      </section>
+    </div>
+    <section class="admin-panel" style="margin-top:24px">
+      <h2>Published blog posts</h2>
+      <div class="admin-list">
+        <?php if (!$posts): ?><p class="muted">No posts published yet.</p><?php else: foreach (array_reverse($posts) as $post): ?>
+          <div class="admin-item"><div><strong><?= e((string)$post['title']) ?></strong><small><?= e(public_date((string)$post['published_at'])) ?></small></div><form method="post" class="admin-actions"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete_post"><input type="hidden" name="id" value="<?= e((string)$post['id']) ?>"><button class="danger" type="submit">Delete</button></form></div>
+        <?php endforeach; endif; ?>
+      </div>
+      <h2 style="margin-top:28px">Published media</h2>
+      <div class="admin-list">
+        <?php if (!$media): ?><p class="muted">No uploaded media yet.</p><?php else: foreach (array_reverse($media) as $item): ?>
+          <div class="admin-item"><div><strong><?= e((string)$item['caption']) ?></strong><small><?= e((string)$item['type']) ?> - <?= e(public_date((string)$item['created_at'])) ?><br>File: <?= e(basename((string)$item['file'])) ?></small></div><div class="admin-actions"><a href="../<?= e((string)$item['file']) ?>" target="_blank">Open</a><form method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete_media"><input type="hidden" name="id" value="<?= e((string)$item['id']) ?>"><button class="danger" type="submit">Remove</button></form></div></div>
+        <?php endforeach; endif; ?>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
