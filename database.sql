@@ -19,3 +19,13 @@ CREATE TABLE users (
   PRIMARY KEY (id),
   UNIQUE KEY uq_users_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE gallery_media (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  caption VARCHAR(160) NOT NULL,
+  file VARCHAR(255) NOT NULL,
+  type ENUM('image', 'video') NOT NULL DEFAULT 'image',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  INDEX idx_gallery_media_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

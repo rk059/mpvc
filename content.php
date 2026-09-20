@@ -95,6 +95,48 @@ function create_admin_user(string $name, string $email, string $password): bool
     ]);
 }
 
+function read_media(): array
+{
+    $pdo = database_connection();
+    if (!$pdo) {
+        return read_content('media');
+    }
+    try {
+        $statement = $pdo->query('SELECT id, caption, file, type, created_at FROM gallery_media ORDER BY created_at ASC');
+        return $statement->fetchAll();
+    } catch (Throwable $error) {
+        error_log($error->getMessage());
+        return [];
+    }
+}
+
+function create_media(string $caption, string $file, string $type): bool
+{
+    $pdo = database_connection();
+    if (!$pdo) {
+        return false;
+    }
+    $statement = $pdo->prepare('INSERT INTO gallery_media (caption, file, type) VALUES (:caption, :file, :type)');
+    return $statement->execute([':caption' => $caption, ':file' => $file, ':type' => $type]);
+}
+
+function delete_media(int $id): ?string
+{
+    $pdo = database_connection();
+    if (!$pdo) {
+        return null;
+    }
+    $statement = $pdo->prepare('SELECT file FROM gallery_media WHERE id = :id LIMIT 1');
+    $statement->execute([':id' => $id]);
+    $media = $statement->fetch();
+    if (!$media) {
+        return null;
+    }
+    $delete = $pdo->prepare('DELETE FROM gallery_media WHERE id = :id');
+    $delete->execute([':id' => $id]);
+    return (string)$media['file'];
+}
+
 function is_admin(): bool
 {
     return !empty($_SESSION['admin_user_id']);
