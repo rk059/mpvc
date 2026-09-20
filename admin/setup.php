@@ -1,6 +1,21 @@
 <?php
 require __DIR__ . '/../content.php';
-if (admin_record()) { header('Location: login.php'); exit; }
+$configuredAdmin = admin_record();
+if (!$configuredAdmin) {
+    $config = file_exists(__DIR__ . '/../config.php') ? require __DIR__ . '/../config.php' : [];
+    $configuredName = trim((string)($config['admin_name'] ?? ''));
+    $configuredEmail = trim((string)($config['admin_email'] ?? ''));
+    $configuredPassword = (string)($config['admin_password'] ?? '');
+    if ($configuredName !== '' && filter_var($configuredEmail, FILTER_VALIDATE_EMAIL) && strlen($configuredPassword) >= 8 && database_connection()) {
+        try {
+            create_admin_user($configuredName, $configuredEmail, $configuredPassword);
+            $configuredAdmin = admin_record();
+        } catch (Throwable $exception) {
+            $configuredAdmin = null;
+        }
+    }
+}
+if ($configuredAdmin) { header('Location: login.php'); exit; }
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
