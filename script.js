@@ -1,52 +1,6 @@
 const navToggle = document.querySelector('.nav-toggle');
 const siteNav = document.querySelector('.site-nav');
 
-const cleanRoutes = {
-  'index.html': '/',
-  'about.html': '/about',
-  'products.html': '/products',
-  'gallery.html': '/gallery',
-  'articles.html': '/articles',
-  'blog.php': '/blog',
-  'contact.html': '/contact',
-};
-
-function cleanRoute(path) {
-  const normalizedPath = path.replace(/^\.\//, '');
-  return cleanRoutes[normalizedPath] || path;
-}
-
-function pageFile(pathname) {
-  const route = pathname.replace(/^\//, '') || 'index';
-  if (route === 'blog') return 'blog.php';
-  return `${route}.html`;
-}
-
-document.querySelectorAll('a[href]').forEach((link) => {
-  const rawHref = link.getAttribute('href');
-  if (!rawHref || rawHref.startsWith('#') || rawHref.includes('://') || rawHref.startsWith('tel:') || rawHref.startsWith('mailto:')) return;
-  const [path, hash] = rawHref.split('#');
-  if (!path.endsWith('.html')) return;
-  link.setAttribute('href', `${cleanRoute(path)}${hash ? `#${hash}` : ''}`);
-});
-
-const cleanCurrentPath = cleanRoute(window.location.pathname.split('/').pop() || 'index.html');
-if (window.location.pathname.endsWith('.html')) {
-  window.history.replaceState({}, '', `${cleanCurrentPath}${window.location.hash}`);
-}
-
-document.addEventListener('click', (event) => {
-  const link = event.target.closest('a[href]');
-  if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
-  const url = new URL(link.href, window.location.href);
-  if (url.origin !== window.location.origin || !url.pathname.startsWith('/')) return;
-  const route = cleanRoute(url.pathname.split('/').pop() || 'index.html');
-  const routePath = route.startsWith('/') ? route : `/${route}`;
-  if (!Object.values(cleanRoutes).includes(routePath)) return;
-  event.preventDefault();
-  window.location.href = `${pageFile(routePath)}${url.hash}`;
-});
-
 const enquiryModalMarkup = `
   <div class="enquiry-modal" id="enquiryModal" aria-hidden="true">
     <div class="enquiry-dialog" role="dialog" aria-modal="true" aria-labelledby="enquiryTitle">
