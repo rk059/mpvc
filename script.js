@@ -67,6 +67,14 @@ document.querySelectorAll('.site-footer').forEach((footer) => {
   footer.querySelector('.footer-brand-block')?.appendChild(social);
 });
 
+document.querySelectorAll('.footer-bottom').forEach((footerBottom) => {
+  if (footerBottom.querySelector('.developer-credit')) return;
+  const credit = document.createElement('p');
+  credit.className = 'developer-credit';
+  credit.innerHTML = 'Designed &amp; developed by <a href="https://wa.me/918059147325?text=Hello%20Rakesh" target="_blank" rel="noreferrer noopener">Rakesh</a>';
+  footerBottom.appendChild(credit);
+});
+
 if (!document.querySelector('.site-nav a[href="blog.php"]') && siteNav) {
   const blogLink = document.createElement('a');
   blogLink.href = 'blog.php';
