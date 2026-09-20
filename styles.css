@@ -624,7 +624,7 @@ main {
 .product-gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .product-gallery-grid figure { margin: 0; overflow: hidden; border: 1px solid rgba(18, 77, 181, 0.1); border-radius: var(--radius-md); background: var(--white); box-shadow: var(--shadow-card); }
 .product-gallery-grid img { width: 100%; height: 250px; object-fit: cover; }
-.about-video { width: 100%; height: 100%; min-height: 420px; object-fit: cover; border-radius: var(--radius-md); background: #dfeafb; }
+.about-video { display: block; width: 100%; height: 560px; object-fit: cover; border-radius: var(--radius-lg); background: #dfeafb; }
 .product-gallery-grid figcaption { padding: 13px 15px 16px; color: var(--brand-blue-900); font-size: 0.84rem; font-weight: 800; }
 .hardware-section { background: #eaf1f8; }
 .hardware-gallery { max-width: 1040px; margin: 0 auto; }
@@ -733,6 +733,14 @@ body.modal-open { overflow: hidden; }
   height: 360px;
   object-fit: cover;
   transition: transform 0.5s ease;
+}
+
+.product-video {
+  display: block;
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  background: #dfeafb;
 }
 
 .product-card:hover .product-image img {
@@ -1423,6 +1431,10 @@ body.modal-open { overflow: hidden; }
 
   .story-image img,
   .detail-media img {
+    height: 380px;
+  }
+
+  .about-video {
     height: 380px;
   }
 
