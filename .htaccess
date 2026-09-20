@@ -11,3 +11,4 @@ RewriteRule ^index$ / [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(about|products|gallery|articles|contact)/?$ $1.html [L]
+RewriteRule ^blog/?$ blog.php [L]
