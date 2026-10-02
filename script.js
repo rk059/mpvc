@@ -47,6 +47,7 @@ const enquiryModalMarkup = `
         <label>Message <span>(optional)</span><textarea name="message" rows="4" placeholder="Tell us what you are planning..."></textarea></label>
         <button class="button primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send enquiry</button>
         <p class="form-status" role="status" aria-live="polite"></p>
+        <p class="form-privacy">We only use your details to reply to this enquiry. We never ask for passwords, OTPs, or payment details.</p>
       </form>
     </div>
   </div>`;
@@ -109,17 +110,9 @@ if (!document.querySelector('.site-nav a[href="blog.php"]') && siteNav) {
   siteNav.insertBefore(blogLink, siteNav.querySelector('a[href="contact.html"]'));
 }
 
-const isHomePage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-const enquiryPromptKey = 'homeEnquiryPromptShown';
-let scrollPromptShown = false;
-window.addEventListener('scroll', () => {
-  if (!isHomePage || scrollPromptShown || sessionStorage.getItem(enquiryPromptKey)) return;
-  if (window.scrollY > 180) {
-    scrollPromptShown = true;
-    openEnquiryModal();
-    sessionStorage.setItem(enquiryPromptKey, 'true');
-  }
-}, { passive: true });
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && enquiryModal?.classList.contains('open')) closeEnquiryModal();
+});
 
 enquiryForm?.addEventListener('submit', async (event) => {
   event.preventDefault();

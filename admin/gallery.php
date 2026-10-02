@@ -56,7 +56,7 @@ $media = array_reverse(read_media());
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"><meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manage gallery | Smart uPVC Bhuna</title>
   <link rel="stylesheet" href="admin.css">
