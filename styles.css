@@ -692,6 +692,59 @@ main {
 .hardware-section { background: #eaf1f8; }
 .hardware-gallery { max-width: 1040px; margin: 0 auto; }
 
+.faq-section {
+  background: linear-gradient(180deg, #f7f9fc 0%, #eef4fb 100%);
+}
+
+.faq-list {
+  display: grid;
+  gap: 16px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border: 1px solid rgba(18, 77, 181, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 20px 22px;
+  color: var(--brand-blue-900);
+  font-size: 1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  color: var(--brand-blue-700);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+}
+
+.faq-item p {
+  padding: 0 22px 22px;
+  color: var(--slate-500);
+  font-size: 1rem;
+}
+
 .social-links {
   display: flex;
   flex-wrap: wrap;
