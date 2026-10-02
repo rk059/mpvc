@@ -23,7 +23,7 @@ usort($posts, static function (array $first, array $second): int {
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="styles.css" />
-  <script defer src="script.js?v=4"></script>
+  <script defer src="script.js?v=5"></script>
   <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Blog","name":"Smart uPVC Bhuna Blog","description":"uPVC and aluminium design ideas, product guidance, and local project advice for homes and businesses in Bhuna, Haryana.","publisher":{"@type":"LocalBusiness","name":"Smart uPVC Bhuna","telephone":"+91 9253131031","address":{"@type":"PostalAddress","streetAddress":"Uklana Road, behind Preeti Marriage Palace","addressLocality":"Bhuna","addressRegion":"Haryana","postalCode":"125111","addressCountry":"IN"}},"url":"https://www.smartupvcbhuna.com/blog.php"}
   </script>

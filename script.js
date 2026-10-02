@@ -110,6 +110,18 @@ if (!document.querySelector('.site-nav a[href="blog.php"]') && siteNav) {
   siteNav.insertBefore(blogLink, siteNav.querySelector('a[href="contact.html"]'));
 }
 
+const isHomePage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+const enquiryPromptKey = 'homeEnquiryPromptShown';
+let scrollPromptShown = false;
+window.addEventListener('scroll', () => {
+  if (!isHomePage || scrollPromptShown || sessionStorage.getItem(enquiryPromptKey)) return;
+  if (window.scrollY > 180) {
+    scrollPromptShown = true;
+    openEnquiryModal();
+    sessionStorage.setItem(enquiryPromptKey, 'true');
+  }
+}, { passive: true });
+
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && enquiryModal?.classList.contains('open')) closeEnquiryModal();
 });
