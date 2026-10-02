@@ -1,6 +1,33 @@
 const navToggle = document.querySelector('.nav-toggle');
 const siteNav = document.querySelector('.site-nav');
 
+if (!document.querySelector('.top-contact-bar')) {
+  const topContactBar = document.createElement('div');
+  topContactBar.className = 'top-contact-bar';
+  topContactBar.innerHTML = `
+    <div class="container top-contact-bar-inner">
+      <div class="top-contact-item">
+        <a href="tel:+919253131031" aria-label="Call Smart uPVC Bhuna">
+          <i class="fa-solid fa-phone"></i>
+          <span>+91 9253131031</span>
+        </a>
+      </div>
+      <div class="top-contact-socials" aria-label="Social media links">
+        <a href="https://www.facebook.com/share/1F8xiaRLWE/" target="_blank" rel="noreferrer noopener" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+        <a href="https://wa.me/919253131031" target="_blank" rel="noreferrer noopener" aria-label="WhatsApp">
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="https://www.google.com/search?kgmid=/g/11z5xsq13l&hl=en-IN&q=Smart+uPVC+Bhuna" target="_blank" rel="noreferrer noopener" aria-label="Google Business profile">
+          <i class="fa-brands fa-google"></i>
+        </a>
+      </div>
+    </div>
+  `;
+  document.body.insertBefore(topContactBar, document.body.firstChild);
+}
+
 const enquiryModalMarkup = `
   <div class="enquiry-modal" id="enquiryModal" aria-hidden="true">
     <div class="enquiry-dialog" role="dialog" aria-modal="true" aria-labelledby="enquiryTitle">
