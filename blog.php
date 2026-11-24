@@ -10,22 +10,26 @@ usort($posts, static function (array $first, array $second): int {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>uPVC Blog & Design Ideas in Bhuna, Haryana | Smart uPVC Bhuna</title>
-  <meta name="description" content="Read useful uPVC and aluminium design ideas, home improvement tips, and local project advice from Smart uPVC Bhuna in Bhuna, Haryana." />
+  <title>uPVC Blog &amp; Design Ideas | Smart uPVC Bhuna</title>
+  <meta name="description" content="uPVC and aluminium window ideas, home improvement tips and local project advice from Smart uPVC Bhuna in Bhuna, Haryana." />
   <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="uPVC Blog & Design Ideas in Bhuna, Haryana" />
-  <meta property="og:description" content="Explore practical uPVC and aluminium guidance for homes, offices, and local projects in Bhuna and nearby Haryana areas." />
+  <meta property="og:title" content="uPVC Blog &amp; Design Ideas | Smart uPVC Bhuna" />
+  <meta property="og:description" content="uPVC and aluminium window ideas, home improvement tips and local project advice from Smart uPVC Bhuna in Bhuna, Haryana." />
   <meta property="og:url" content="https://www.smartupvcbhuna.com/blog.php" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Smart uPVC Bhuna" />
+  <meta property="og:image" content="https://www.smartupvcbhuna.com/logo/website/og-image-1200x630.png" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://www.smartupvcbhuna.com/blog.php" />
   <link rel="icon" type="image/png" href="logo/website/favicon-32.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
   <script defer src="script.js?v=6"></script>
   <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Blog","name":"Smart uPVC Bhuna Blog","description":"uPVC and aluminium design ideas, product guidance, and local project advice for homes and businesses in Bhuna, Haryana.","publisher":{"@type":"LocalBusiness","name":"Smart uPVC Bhuna","telephone":"+91 9253131031","address":{"@type":"PostalAddress","streetAddress":"Uklana Road, behind Preeti Marriage Palace","addressLocality":"Bhuna","addressRegion":"Haryana","postalCode":"125111","addressCountry":"IN"}},"url":"https://www.smartupvcbhuna.com/blog.php"}
+    {"@context":"https://schema.org","@type":"Blog","name":"Smart uPVC Bhuna Blog","description":"uPVC and aluminium design ideas, product guidance, and local project advice for homes and businesses in Bhuna, Haryana.","publisher":{"@type":"HomeAndConstructionBusiness","name":"Smart uPVC Bhuna","telephone":"+91 9253131031","address":{"@type":"PostalAddress","streetAddress":"Uklana Road, behind Preeti Marriage Palace","addressLocality":"Bhuna","addressRegion":"Haryana","postalCode":"125111","addressCountry":"IN"}},"url":"https://www.smartupvcbhuna.com/blog.php"}
   </script>
 </head>
 <body class="inner-page">
@@ -71,6 +75,6 @@ usort($posts, static function (array $first, array $second): int {
     </section>
     <section class="section cta-section"><div class="container cta-panel reveal-on-scroll"><div class="cta-text"><span class="section-kicker accent">Have an idea?</span><h2>Bring us the opening. We’ll help with the direction.</h2></div><div class="cta-actions"><a class="button primary large" href="contact.html"><i class="fa-solid fa-paper-plane"></i> Send an enquiry</a></div></div></section>
   </main>
-  <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand-block"><div class="footer-brand-logo-wrap"><img src="logo/website/header-logo-200.png" alt="Smart uPVC Bhuna logo" width="200" height="217" loading="lazy" decoding="async" /></div><div><h3>Smart uPVC Bhuna</h3><p>uPVC &amp; Aluminium Sliding Doors and Windows</p></div></div><div><h4>Explore</h4><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="blog.php">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div><div><h4>Connect</h4><ul><li><a href="tel:+919253131031">+91 9253131031</a></li><li><a href="https://wa.me/919253131031">WhatsApp us</a></li></ul></div></div><div class="footer-bottom"><p>© 2026 Smart uPVC Bhuna. All Rights Reserved.</p></div></footer>
+  <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand-block"><div class="footer-brand-logo-wrap"><img src="logo/website/header-logo-200.png" alt="Smart uPVC Bhuna logo" width="200" height="217" loading="lazy" decoding="async" /></div><div><h3>Smart uPVC Bhuna</h3><p>uPVC &amp; Aluminium Sliding Doors and Windows</p></div></div><div><h4>Explore</h4><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="blog.php">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div><div><h4>Connect</h4><ul><li><a href="tel:+919253131031">+91 9253131031</a></li><li>Uklana Road, behind Preeti Marriage Palace, Bhuna, Haryana 125111</li><li><a href="https://wa.me/919253131031">WhatsApp us</a></li></ul></div></div><div class="footer-bottom"><p>© 2026 Smart uPVC Bhuna. All Rights Reserved.</p></div></footer>
 </body>
 </html>
