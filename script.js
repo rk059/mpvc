@@ -173,6 +173,47 @@ const revealObserver = new IntersectionObserver(
 
 revealItems.forEach((item) => revealObserver.observe(item));
 
+// Videos ship with preload="none"; muted showcase clips start only once they scroll into view.
+const connection = navigator.connection;
+const isSlowConnection = Boolean(connection?.saveData) || /(^|-)2g$/.test(connection?.effectiveType || '');
+const autoplayVideos = document.querySelectorAll('video[data-autoplay]');
+
+autoplayVideos.forEach((video) => {
+  if (video.controls) return;
+  video.addEventListener('click', () => (video.paused ? video.play().catch(() => {}) : video.pause()));
+});
+
+if (!isSlowConnection && autoplayVideos.length) {
+  const videoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else if (!video.paused) {
+          video.pause();
+        }
+      });
+    },
+    { threshold: 0.35 }
+  );
+  autoplayVideos.forEach((video) => videoObserver.observe(video));
+}
+
+// Poster-less videos fetch only their first frame once they are near the viewport.
+const previewObserver = isSlowConnection
+  ? null
+  : new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.preload = 'metadata';
+          previewObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: '200px 0px' }
+    );
+
 const modal = document.getElementById('galleryModal');
 const modalImage = document.getElementById('modalImage');
 const modalClose = document.querySelector('.modal-close');
@@ -210,12 +251,13 @@ if (galleryGrid) {
           video.muted = true;
           video.loop = true;
           video.playsInline = true;
-          video.preload = 'metadata';
+          video.preload = 'none';
           const source = document.createElement('source');
           source.src = item.file;
           source.type = item.type === 'video' ? 'video/mp4' : item.type;
           video.appendChild(source);
           wrapper.appendChild(video);
+          previewObserver?.observe(video);
         } else {
           wrapper.type = 'button';
           wrapper.setAttribute('aria-label', `Open ${item.caption}`);
@@ -223,6 +265,7 @@ if (galleryGrid) {
           image.src = item.file;
           image.alt = item.caption;
           image.loading = 'lazy';
+          image.decoding = 'async';
           wrapper.appendChild(image);
         }
         galleryGrid.appendChild(wrapper);
